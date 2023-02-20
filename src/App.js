@@ -1,29 +1,32 @@
-import React, { useState, useEffect } from "react";
-import Cards from "./components/Cards";
+import React from "react";
 import Navbar from "./components/Navbar";
-import axios from "axios";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import Recipe from "./pages/Recipe";
+import ErrorPage from "./pages/ErrorPage";
+import RecipeTemplate from "./pages/RecipeTemplate";
+
 function App() {
-  const [data, setData] = useState([]);
-  useEffect(() => {
-    axios
-      .get(
-        "https://api.edamam.com/api/recipes/v2?type=public&q=chicken&app_id=77a50b7e&app_key=138848762b30677b369e3de0a691e6c4"
-      )
-      .then((res) => setData(res?.data?.hits));
-  }, []);
-
-  console.log(data);
-
   return (
-    <div className="App">
+    <BrowserRouter>
       <Navbar />
-      <div className="row">
-      {data?.map((item) => {
-        return <Cards label={item?.recipe?.label} image={item?.recipe?.image} calories = {item?.recipe?.calories} source={item?.recipe?.source
-        } />;
-      })}
-      </div>
-    </div>
+      <Routes>
+        {/* static page */}
+        <Route path="/" element={<Home />} />
+        <Route path="/About" element={<About />} />
+        <Route path="/Contact" element={<Contact />} />
+        <Route path="/Recipe" element={<Recipe />} />
+
+        {/* Dynamic pages */}
+
+        <Route path="/Recipe/:id" element={<RecipeTemplate />} />
+
+        {/* error page */}
+        <Route path="*" element={<ErrorPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
